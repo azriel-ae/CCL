@@ -457,8 +457,8 @@ img {
 
 .hero-visual-frame {
   position: relative;
-  width: min(100%, 400px);
-  aspect-ratio: 1 / 1;
+  width: min(100%, 480px);
+  aspect-ratio: 10 / 7;
   background: var(--ink);
   border-radius: var(--radius-md);
   overflow: hidden;
@@ -466,39 +466,6 @@ img {
 }
 
 .hero-visual-frame img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.hero-visual-tag {
-  position: absolute;
-  left: 18px;
-  bottom: 18px;
-  background: var(--bg);
-  color: var(--ink);
-  font-size: 12px;
-  font-weight: 600;
-  padding: 8px 14px;
-  border-radius: var(--radius-full);
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.hero-visual-badge {
-  position: absolute;
-  top: -18px;
-  right: -14px;
-  width: 92px;
-  height: 92px;
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  border: 3px solid var(--bg);
-  box-shadow: 0 0 0 1px var(--border);
-}
-
-.hero-visual-badge img {
   width: 100%;
   height: 100%;
   object-fit: cover;
