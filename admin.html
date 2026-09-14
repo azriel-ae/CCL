@@ -12,10 +12,39 @@
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <script>
+    // Selaraskan palet Tailwind dengan brand utama Corat Coret Layar
+    // (off-white + hitam + orange) tanpa mengubah logic/markup admin.js.
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            red: {
+              50: '#FFF4ED',
+              100: '#FFE6D5',
+              200: '#FFC9A8',
+              300: '#FFA873',
+              400: '#FF8142',
+              500: '#FF6B2E',
+              600: '#FF5A1F',
+              700: '#C93F0F',
+              800: '#9A310C',
+              900: '#742609',
+              950: '#3D1304',
+            },
+            stone: {
+              50: '#F7F5F0',
+              100: '#F1ECE2',
+            },
+          },
+        },
+      },
+    };
+  </script>
+  <!-- Google Fonts: Inter & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
   <link rel="stylesheet" href="assets/css/admin.css" />

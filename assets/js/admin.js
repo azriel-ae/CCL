@@ -176,9 +176,6 @@ const AppState = {
 function renderLoginScreen() {
   return `
     <div class="min-h-screen bg-stone-100 flex items-center justify-center p-4 relative overflow-hidden">
-      <div class="absolute -top-32 -left-32 w-96 h-96 bg-red-200/40 rounded-full blur-[100px] pointer-events-none"></div>
-      <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-teal-200/40 rounded-full blur-[100px] pointer-events-none"></div>
-
       <div class="max-w-md w-full bg-white rounded-3xl p-8 shadow-xl border border-stone-200 z-10 space-y-6 animate-fade-in">
         <div class="text-center space-y-3">
           <div class="w-14 h-14 bg-red-600 text-white rounded-2xl mx-auto flex items-center justify-center shadow-lg shadow-red-600/30 ring-4 ring-red-50">
