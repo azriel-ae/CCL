@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="id" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+
+    <title>Corat Coret Layar - Custom Design Premium</title>
+    <meta
+      name="description"
+      content="Custom design premium: kaos, hoodie, flag, sticker, tote bag, jersey, dan lainnya. Harga terjangkau, cepat, full custom."
+    />
+    <meta name="theme-color" content="#F7F5F0" id="theme-color-meta" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/gambar/favicon.png" />
+    <link rel="apple-touch-icon" href="assets/gambar/favicon.png" />
+
+    <!-- Fonts + FontAwesome Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="assets/css/index.css" />
+  </head>
+
+  <body>
+    <header class="header" id="navbar">
+      <div class="container nav">
+        <a href="#home" class="brand-logo">
+          <img
+            src="assets/gambar/logo-badge.png"
+            alt="Corat Coret Layar Logo"
+            onerror="this.src = 'https://placehold.co/100x100/111111/fff?text=CCL'"
+          />
+          <span>Corat Coret Layar</span>
+        </a>
+
+        <!-- Desktop Links -->
+        <ul class="nav-links">
+          <li><a href="#home" class="nav-item-link active">Home</a></li>
+          <li><a href="#produk" class="nav-item-link">Katalog</a></li>
+          <li><a href="#cara-order" class="nav-item-link">Cara Order</a></li>
+          <li><a href="#tentang" class="nav-item-link">Tentang</a></li>
+        </ul>
+
+        <!-- Desktop Action CTA -->
+        <div class="nav-actions">
+          <a
+            class="btn btn-admin-nav"
+            id="adminNavBtn"
+            href="https://coratcoretlayar.vercel.app/admin"
+            target="_blank"
+            rel="noopener"
+            title="Login Admin"
+          >
+            <i class="fa-solid fa-user-shield"></i>
+            <span id="adminNavText">Admin</span>
+          </a>
+
+          <a href="https://wa.me/6281333385899" target="_blank" class="btn btn-primary">
+            Konsultasi
+          </a>
+        </div>
+
+        <!-- Mobile Toggle Button -->
+        <button
+          class="nav-toggle"
+          id="navToggle"
+          aria-label="Buka Menu Navigasi"
+          aria-expanded="false"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </header>
+
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+    <aside class="mobile-menu-drawer" id="mobileMenuDrawer">
+      <div>
+        <ul class="mobile-nav-links">
+          <li>
+            <a href="#home" class="mobile-nav-item active">
+              <span>Home</span>
+              <i class="fa-solid fa-chevron-right"></i>
+            </a>
+          </li>
+          <li>
+            <a href="#produk" class="mobile-nav-item">
+              <span>Katalog</span>
+              <i class="fa-solid fa-chevron-right"></i>
+            </a>
+          </li>
+          <li>
+            <a href="#cara-order" class="mobile-nav-item">
+              <span>Cara Order</span>
+              <i class="fa-solid fa-chevron-right"></i>
+            </a>
+          </li>
+          <li>
+            <a href="#tentang" class="mobile-nav-item">
+              <span>Tentang</span>
+              <i class="fa-solid fa-chevron-right"></i>
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://coratcoretlayar.vercel.app/admin"
+              target="_blank"
+              rel="noopener"
+              class="mobile-nav-item"
+            >
+              <span>Admin</span>
+              <i class="fa-solid fa-user-shield"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div style="border-top: 1px solid var(--border); padding-top: 20px">
+        <a
+          href="https://wa.me/6281333385899"
+          target="_blank"
+          class="btn btn-gold"
+          style="width: 100%"
+        >
+          <i class="fa-brands fa-whatsapp"></i> Chat WhatsApp Admin
+        </a>
+      </div>
+    </aside>
+
+    <main>
+      <section id="home" class="hero">
+        <div class="container hero-grid">
+          <div class="hero-copy">
+            <p class="eyebrow">
+              <span class="eyebrow-dot"></span>
+              Kita siap buat:
+              <strong id="typingText">Custom Design T-Shirt</strong>
+            </p>
+
+            <h1 class="hero-title">
+              Custom Merchandise<br />
+              <span class="accent-text">Made for Your Idea.</span>
+            </h1>
+
+            <p class="hero-subtitle">
+              Bikin custom design kaos, hoodie, sticker, flag, tote bag, dan jersey sesuai
+              imajinasi kamu. Hasil rapi, detail presisi, dan pengerjaan cepat.
+            </p>
+
+            <div class="hero-actions">
+              <a href="#produk" class="btn btn-primary">Lihat Katalog</a>
+              <a href="https://wa.me/6281333385899" target="_blank" class="btn btn-ghost">
+                Konsultasi via WhatsApp
+              </a>
+            </div>
+
+            <div class="hero-tags">
+              <span>Kaos</span>
+              <span>Hoodie</span>
+              <span>Sticker</span>
+              <span>Flag</span>
+              <span>Tote Bag</span>
+              <span>Jersey</span>
+            </div>
+          </div>
+
+          <div class="hero-visual">
+            <div class="hero-visual-frame">
+              <img
+                src="assets/gambar/t-shirt.png"
+                alt="Contoh Custom Design T-Shirt Corat Coret Layar"
+                onerror="this.src='https://placehold.co/760x950/111111/fff?text=Corat+Coret+Layar'"
+              />
+              <span class="hero-visual-tag">Full Custom Design</span>
+            </div>
+            <div class="hero-visual-badge">
+              <img
+                src="assets/gambar/logo-badge.png"
+                alt="Corat Coret Layar"
+                onerror="this.src='https://placehold.co/100x100/111111/fff?text=CCL'"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="tentang" class="features-section">
+        <div class="container">
+          <div class="section-head">
+            <span class="section-label">Kenapa Memilih Kami</span>
+            <h2>Kualitas Terbaik Tanpa Kompromi</h2>
+          </div>
+
+          <div class="feature-list">
+            <div class="feature-row">
+              <span class="feature-index">01</span>
+              <div class="feature-body">
+                <h3>Design Premium</h3>
+                <p>Design premium dengan standar kerapian tinggi di setiap detail hasil akhir.</p>
+              </div>
+            </div>
+
+            <div class="feature-row">
+              <span class="feature-index">02</span>
+              <div class="feature-body">
+                <h3>Full Custom Design</h3>
+                <p>
+                  Bebas berkreasi tanpa batas minimum order untuk beragam pilihan merchandise.
+                </p>
+              </div>
+            </div>
+
+            <div class="feature-row">
+              <span class="feature-index">03</span>
+              <div class="feature-body">
+                <h3>Proses Cepat</h3>
+                <p>
+                  Estimasi waktu pengerjaan fleksibel dan tepat waktu agar siap dipakai saat
+                  event.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="produk" class="products-section">
+        <div class="container">
+          <div class="section-head">
+            <span class="section-label">Katalog Pilihan</span>
+            <h2>Pilih Merchandise Favoritmu</h2>
+            <p>Tambahkan ke keranjang untuk memesan secara mudah melalui WhatsApp.</p>
+          </div>
+
+          <div class="product-grid" id="productGridContainer">
+            <!-- Rendered dynamically via JavaScript -->
+          </div>
+        </div>
+      </section>
+
+      <section id="cara-order" class="steps-section">
+        <div class="container">
+          <div class="section-head">
+            <span class="section-label">Alur Pemesanan</span>
+            <h2>5 Langkah Mudah Order</h2>
+            <p>Proses praktis dan transparan dari awal hingga produk tiba di tempatmu.</p>
+          </div>
+
+          <div class="steps-grid">
+            <div class="step-card">
+              <span class="step-number">01</span>
+              <h3>Pilih Produk</h3>
+              <p>Pilih barang dari katalog atau konsultasikan ide desain kustomu.</p>
+            </div>
+
+            <div class="step-card">
+              <span class="step-number">02</span>
+              <h3>Konsultasi Desain</h3>
+              <p>Diskusikan konsep, mockup, dan spesifikasi pesanan dengan admin.</p>
+            </div>
+
+            <div class="step-card">
+              <span class="step-number">03</span>
+              <h3>Pembayaran</h3>
+              <p>Lakukan konfirmasi pembayaran aman untuk segera diproses.</p>
+            </div>
+
+            <div class="step-card">
+              <span class="step-number">04</span>
+              <h3>Proses Produksi</h3>
+              <p>Design akan diproses dengan teliti sesuai kemauan pelanggan.</p>
+            </div>
+
+            <div class="step-card">
+              <span class="step-number">05</span>
+              <h3>Design Akan Dikirim</h3>
+              <p>Hasil karya &amp; design dikirim.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="cta-band">
+        <div class="container cta-band-inner">
+          <h2>Punya ide merchandise?</h2>
+          <p>Ceritakan konsep kamu kepada kami.</p>
+          <a href="https://wa.me/6281333385899" target="_blank" class="btn btn-primary btn-lg">
+            <i class="fa-brands fa-whatsapp"></i> Konsultasi via WhatsApp
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <div class="brand-logo">
+              <img
+                src="assets/gambar/logo-badge.png"
+                alt="Corat Coret Layar Logo"
+                onerror="this.src = 'https://placehold.co/100x100/111111/fff?text=CCL'"
+              />
+              <span>Corat Coret Layar</span>
+            </div>
+            <p>
+              Layanan custom design merchandise berkualitas premium untuk kaos, hoodie, stiker,
+              flag, dan perlengkapan hobi/komunitas.
+            </p>
+          </div>
+
+          <div>
+            <h4 class="footer-title">Navigasi Cepat</h4>
+            <ul class="footer-links">
+              <li><a href="#home">Home</a></li>
+              <li><a href="#produk">Katalog Produk</a></li>
+              <li><a href="#cara-order">Cara Pemesanan</a></li>
+              <li><a href="#tentang">Tentang Kami</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 class="footer-title">Kontak Kami</h4>
+            <div class="footer-contact-item">
+              <i class="fa-brands fa-whatsapp"></i>
+              <span>+62 813-3338-5899</span>
+            </div>
+            <div class="footer-contact-item">
+              <i class="fa-solid fa-location-dot"></i>
+              <span>Indonesia</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <p>&copy; <span id="year"></span> Corat Coret Layar. All Rights Reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Floating action buttons -->
+    <div class="floating-container">
+      <button class="float-btn float-btn-cart" id="openCartBtn" aria-label="Buka Keranjang">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <span class="cart-badge" id="cartBadgeCount" style="display: none">0</span>
+      </button>
+      <a
+        href="https://wa.me/6281333385899"
+        target="_blank"
+        class="float-btn float-btn-wa"
+        aria-label="Chat WhatsApp"
+      >
+        <i class="fa-brands fa-whatsapp"></i>
+      </a>
+    </div>
+
+    <!-- Shopping Cart Slide Drawer -->
+    <div class="cart-overlay" id="cartOverlay"></div>
+    <aside class="cart-panel" id="cartPanel">
+      <div class="cart-header">
+        <h3>
+          <i class="fa-solid fa-bag-shopping" style="color: var(--accent)"></i> Keranjang Pesanan
+        </h3>
+        <button class="cart-close-btn" id="closeCartBtn" aria-label="Tutup Keranjang">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="cart-items-body" id="cartItemsContainer">
+        <p class="cart-empty-text" id="cartEmptyMsg">Keranjang belanjaanmu masih kosong.</p>
+      </div>
+
+      <div class="cart-footer">
+        <button class="btn-checkout-wa" id="checkoutWaBtn" disabled onclick="checkoutToWhatsApp()">
+          <i class="fa-brands fa-whatsapp"></i> Pesan via WhatsApp
+        </button>
+      </div>
+    </aside>
+
+    <script src="assets/js/index.js"></script>
+  </body>
+</html>
