@@ -1,17 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getPublicAccounts, createAccount, deleteAccount } from "@/lib/accounts";
 import { getSession } from "@/lib/auth";
+import { withErrorHandling } from "@/lib/api-helpers";
 
 export const runtime = "nodejs";
 
-export async function GET() {
+export const GET = withErrorHandling(async () => {
   const accounts = await getPublicAccounts();
   return NextResponse.json({ success: true, accounts });
-}
+});
 
-export async function POST(req: NextRequest) {
+export const POST = withErrorHandling(async (req) => {
   const session = await getSession();
-  const body = await req.json().catch(() => null);
+  const body = await (req as NextRequest).json().catch(() => null);
   const username = (body?.username || "").toString();
   const password = (body?.password || "").toString();
 
@@ -20,11 +21,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: false, error: result.message }, { status: 400 });
   }
   return NextResponse.json({ success: true, account: result.account }, { status: 201 });
-}
+});
 
-export async function DELETE(req: NextRequest) {
+export const DELETE = withErrorHandling(async (req) => {
   const session = await getSession();
-  const username = req.nextUrl.searchParams.get("username");
+  const username = (req as NextRequest).nextUrl.searchParams.get("username");
   if (!username) {
     return NextResponse.json({ success: false, error: "username wajib diisi." }, { status: 400 });
   }
@@ -34,4 +35,4 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ success: false, error: result.message }, { status: 400 });
   }
   return NextResponse.json({ success: true });
-}
+});

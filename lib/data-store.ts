@@ -21,6 +21,19 @@ import path from "path";
 const useLocalFallback = !process.env.BLOB_READ_WRITE_TOKEN;
 const LOCAL_DIR = path.join(process.cwd(), ".data");
 
+function assertLocalFallbackIsSafe() {
+  // Di Vercel (serverless), filesystem project bersifat read-only kecuali
+  // /tmp — fallback ke folder lokal ./.data HANYA valid untuk development
+  // di laptop. Kalau BLOB_READ_WRITE_TOKEN lupa di-set di Vercel, gagalnya
+  // dulu berupa error filesystem teknis (EROFS) yang membingungkan. Sekarang
+  // dilempar sebagai pesan yang jelas dan actionable.
+  if (process.env.VERCEL) {
+    throw new Error(
+      "BLOB_READ_WRITE_TOKEN belum di-set di Vercel. Buka Vercel Dashboard → Storage → Create Database → Blob, lalu tambahkan tokennya di Project Settings → Environment Variables, kemudian redeploy."
+    );
+  }
+}
+
 async function ensureLocalDir() {
   await fs.mkdir(LOCAL_DIR, { recursive: true });
 }
@@ -47,7 +60,10 @@ async function findExistingBlob(key: string) {
 }
 
 export async function readJson<T>(key: string): Promise<T | null> {
-  if (useLocalFallback) return readLocal<T>(key);
+  if (useLocalFallback) {
+    assertLocalFallbackIsSafe();
+    return readLocal<T>(key);
+  }
 
   const existing = await findExistingBlob(key);
   if (!existing) return null;
@@ -65,6 +81,7 @@ export async function readJson<T>(key: string): Promise<T | null> {
 
 export async function writeJson(key: string, value: unknown): Promise<void> {
   if (useLocalFallback) {
+    assertLocalFallbackIsSafe();
     await writeLocal(key, value);
     return;
   }
@@ -80,6 +97,7 @@ export async function writeJson(key: string, value: unknown): Promise<void> {
 
 export async function deleteJson(key: string): Promise<void> {
   if (useLocalFallback) {
+    assertLocalFallbackIsSafe();
     try {
       await fs.unlink(path.join(LOCAL_DIR, key));
     } catch {

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { put } from "@vercel/blob";
 import { promises as fs } from "fs";
 import path from "path";
+import { withErrorHandling } from "@/lib/api-helpers";
 
 // Upload foto produk. Diproteksi middleware.ts (wajib login admin).
 //
@@ -14,8 +15,8 @@ export const runtime = "nodejs";
 
 const MAX_SIZE = 5 * 1024 * 1024; // 5MB
 
-export async function POST(req: NextRequest) {
-  const formData = await req.formData();
+export const POST = withErrorHandling(async (req) => {
+  const formData = await (req as NextRequest).formData();
   const file = formData.get("file");
 
   if (!file || !(file instanceof File)) {
@@ -38,7 +39,20 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true, url: blob.url });
   }
 
-  // Fallback lokal untuk development tanpa token Vercel Blob.
+  // Fallback lokal HANYA untuk development di laptop. Di Vercel, folder
+  // project (termasuk public/) read-only saat runtime — kalau sampai ke
+  // sini berarti BLOB_READ_WRITE_TOKEN lupa di-set di production.
+  if (process.env.VERCEL) {
+    return NextResponse.json(
+      {
+        success: false,
+        error:
+          "BLOB_READ_WRITE_TOKEN belum di-set di Vercel. Tambahkan di Project Settings → Environment Variables, lalu redeploy.",
+      },
+      { status: 500 }
+    );
+  }
+
   const uploadDir = path.join(process.cwd(), "public", "uploads");
   await fs.mkdir(uploadDir, { recursive: true });
   const localName = filename.replace("products/", "");
@@ -46,4 +60,4 @@ export async function POST(req: NextRequest) {
   await fs.writeFile(path.join(uploadDir, localName), buffer);
 
   return NextResponse.json({ success: true, url: `/uploads/${localName}` });
-}
+});

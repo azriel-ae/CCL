@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getProducts, createProduct, updateProduct, deleteProduct } from "@/lib/products";
 import { getSession } from "@/lib/auth";
 import { logActivity } from "@/lib/activity";
+import { withErrorHandling } from "@/lib/api-helpers";
 
 // Semua method di sini sudah dijaga oleh middleware.ts (wajib login admin).
 // getSession() dipanggil ulang di sini untuk mencatat siapa yang melakukan
@@ -9,14 +10,14 @@ import { logActivity } from "@/lib/activity";
 
 export const runtime = "nodejs";
 
-export async function GET() {
+export const GET = withErrorHandling(async () => {
   const products = await getProducts();
   return NextResponse.json({ success: true, products });
-}
+});
 
-export async function POST(req: NextRequest) {
+export const POST = withErrorHandling(async (req) => {
   const session = await getSession();
-  const body = await req.json().catch(() => null);
+  const body = await (req as NextRequest).json().catch(() => null);
 
   if (!body?.name || !body?.desc) {
     return NextResponse.json(
@@ -28,11 +29,11 @@ export async function POST(req: NextRequest) {
   const product = await createProduct(body);
   await logActivity(session!.username, `Menambahkan produk baru: ${product.name}`);
   return NextResponse.json({ success: true, product }, { status: 201 });
-}
+});
 
-export async function PUT(req: NextRequest) {
+export const PUT = withErrorHandling(async (req) => {
   const session = await getSession();
-  const body = await req.json().catch(() => null);
+  const body = await (req as NextRequest).json().catch(() => null);
 
   if (!body?.id) {
     return NextResponse.json({ success: false, error: "id produk wajib diisi." }, { status: 400 });
@@ -45,11 +46,11 @@ export async function PUT(req: NextRequest) {
 
   await logActivity(session!.username, `Mengubah produk: ${product.name}`);
   return NextResponse.json({ success: true, product });
-}
+});
 
-export async function DELETE(req: NextRequest) {
+export const DELETE = withErrorHandling(async (req) => {
   const session = await getSession();
-  const id = req.nextUrl.searchParams.get("id");
+  const id = (req as NextRequest).nextUrl.searchParams.get("id");
   if (!id) {
     return NextResponse.json({ success: false, error: "id produk wajib diisi." }, { status: 400 });
   }
@@ -61,4 +62,4 @@ export async function DELETE(req: NextRequest) {
 
   await logActivity(session!.username, `Menghapus produk (id: ${id})`);
   return NextResponse.json({ success: true });
-}
+});
