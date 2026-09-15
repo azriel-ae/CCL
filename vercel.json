@@ -1,6 +1,0 @@
-{
-  "rewrites": [
-    { "source": "/penjualan", "destination": "/penjualan.html" },
-    { "source": "/admin", "destination": "/admin.html" }
-  ]
-}
