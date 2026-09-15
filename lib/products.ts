@@ -66,12 +66,20 @@ export const DEFAULT_PRODUCTS: Product[] = [
 ];
 
 export async function getProducts(): Promise<Product[]> {
-  const stored = await readJson<Product[]>(PRODUCTS_KEY);
-  if (!stored || !Array.isArray(stored) || stored.length === 0) {
-    await writeJson(PRODUCTS_KEY, DEFAULT_PRODUCTS);
+  try {
+    const stored = await readJson<Product[]>(PRODUCTS_KEY);
+    if (!stored || !Array.isArray(stored) || stored.length === 0) {
+      await writeJson(PRODUCTS_KEY, DEFAULT_PRODUCTS);
+      return DEFAULT_PRODUCTS;
+    }
+    return stored;
+  } catch (err) {
+    // Jangan sampai halaman utama ikut down hanya karena penyimpanan data
+    // (mis. BLOB_READ_WRITE_TOKEN belum di-set) sedang bermasalah — tampilkan
+    // katalog default dulu, sambil error-nya tetap tercatat di log server.
+    console.error("getProducts() gagal, fallback ke DEFAULT_PRODUCTS:", err);
     return DEFAULT_PRODUCTS;
   }
-  return stored;
 }
 
 export async function saveProducts(products: Product[]): Promise<void> {

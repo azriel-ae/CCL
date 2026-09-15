@@ -10,9 +10,16 @@ import { ProductCatalog } from "@/components/home/ProductCatalog";
 import { OrderProcess } from "@/components/home/OrderProcess";
 import { CtaBand } from "@/components/home/CtaBand";
 
-// Revalidate secara berkala supaya perubahan produk dari admin ikut muncul
-// di halaman publik tanpa perlu redeploy (ISR).
-export const revalidate = 60;
+// Halaman ini sengaja TIDAK di-generate statis saat build (force-dynamic),
+// dirender ulang di server setiap ada request. Dua alasan:
+// 1) Data produk berasal dari admin (bisa berubah kapan saja) — dynamic
+//    rendering membuatnya selalu up-to-date tanpa perlu redeploy.
+// 2) Prerender saat build butuh env var (BLOB_READ_WRITE_TOKEN) sudah
+//    tersedia PADA SAAT BUILD, yang tidak selalu terjamin (mis. saat
+//    deploy pertama kali sebelum semua env var sempat diisi) — ini pernah
+//    bikin build gagal total. Dengan force-dynamic, proses build tidak lagi
+//    bergantung pada ketersediaan data saat itu.
+export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
   const products = await getProducts();
