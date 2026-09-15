@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #f7f5f0;
+  --surface: #ffffff;
+  --ink: #111111;
+  --accent: #ff5a1f;
+  --border: #d9d5cc;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--ink);
+}
+
+::selection {
+  background-color: var(--accent);
+  color: #ffffff;
+}
+
+@layer components {
+  .container-edge {
+    @apply mx-auto w-full max-w-content px-5 md:px-8;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold tracking-tight transition active:scale-[0.98];
+  }
+
+  .btn-primary {
+    @apply btn bg-ink text-white hover:bg-accent;
+  }
+
+  .btn-outline {
+    @apply btn border border-ink/20 bg-transparent text-ink hover:border-ink;
+  }
+
+  .btn-accent {
+    @apply btn bg-accent text-white hover:bg-ink;
+  }
+
+  .eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.18em] text-ink/50;
+  }
+
+  .input {
+    @apply w-full rounded-xl border border-border bg-bg px-3.5 py-2.5 text-sm;
+  }
+
+  .input:focus {
+    @apply border-ink outline-none;
+  }
+}
