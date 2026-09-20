@@ -17,6 +17,9 @@ export const GET = withErrorHandling(async () => {
 
 export const POST = withErrorHandling(async (req) => {
   const session = await getSession();
+  if (!session) {
+    return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
+  }
   const body = await (req as NextRequest).json().catch(() => null);
 
   if (!body?.name || !body?.desc) {
@@ -27,12 +30,15 @@ export const POST = withErrorHandling(async (req) => {
   }
 
   const product = await createProduct(body);
-  await logActivity(session!.username, `Menambahkan produk baru: ${product.name}`);
+  await logActivity(session.username, `Menambahkan produk baru: ${product.name}`);
   return NextResponse.json({ success: true, product }, { status: 201 });
 });
 
 export const PUT = withErrorHandling(async (req) => {
   const session = await getSession();
+  if (!session) {
+    return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
+  }
   const body = await (req as NextRequest).json().catch(() => null);
 
   if (!body?.id) {
@@ -44,12 +50,15 @@ export const PUT = withErrorHandling(async (req) => {
     return NextResponse.json({ success: false, error: "Produk tidak ditemukan." }, { status: 404 });
   }
 
-  await logActivity(session!.username, `Mengubah produk: ${product.name}`);
+  await logActivity(session.username, `Mengubah produk: ${product.name}`);
   return NextResponse.json({ success: true, product });
 });
 
 export const DELETE = withErrorHandling(async (req) => {
   const session = await getSession();
+  if (!session) {
+    return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
+  }
   const id = (req as NextRequest).nextUrl.searchParams.get("id");
   if (!id) {
     return NextResponse.json({ success: false, error: "id produk wajib diisi." }, { status: 400 });
@@ -60,6 +69,6 @@ export const DELETE = withErrorHandling(async (req) => {
     return NextResponse.json({ success: false, error: "Produk tidak ditemukan." }, { status: 404 });
   }
 
-  await logActivity(session!.username, `Menghapus produk (id: ${id})`);
+  await logActivity(session.username, `Menghapus produk (id: ${id})`);
   return NextResponse.json({ success: true });
 });

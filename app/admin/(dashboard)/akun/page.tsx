@@ -1,7 +1,18 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Loader2, UserPlus, Trash2, Inbox, ShieldCheck, CheckCircle2 } from "lucide-react";
+import {
+  Loader2,
+  UserPlus,
+  Trash2,
+  Inbox,
+  ShieldCheck,
+  CheckCircle2,
+  KeyRound,
+  Eye,
+  EyeOff,
+  Save,
+} from "lucide-react";
 import type { PublicAdminAccount } from "@/lib/types";
 
 export default function AkunPage() {
@@ -106,6 +117,8 @@ export default function AkunPage() {
         </div>
       </form>
 
+      <ChangePasswordCard onSuccess={showToast} />
+
       <div className="overflow-hidden rounded-2xl border border-border bg-surface">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
@@ -169,5 +182,138 @@ export default function AkunPage() {
         </div>
       )}
     </div>
+  );
+}
+
+/**
+ * Form "Ubah Password Admin" untuk akun yang sedang login.
+ *
+ * Semua input bertipe password (tombol mata hanya mengubah tipe input secara
+ * lokal di browser, tidak pernah mengirim/menampilkan password ke tempat lain).
+ * Verifikasi password lama, aturan panjang password, dan penyimpanan hash
+ * seluruhnya dikerjakan di server (/api/admin/password) — halaman ini tidak
+ * pernah menyentuh hash maupun menyimpan password di state setelah sukses.
+ */
+function ChangePasswordCard({ onSuccess }: { onSuccess: (msg: string) => void }) {
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [show, setShow] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setError(null);
+
+    if (newPassword !== confirmPassword) {
+      setError("Konfirmasi password tidak cocok.");
+      return;
+    }
+
+    setSaving(true);
+    try {
+      const res = await fetch("/api/admin/password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ currentPassword, newPassword, confirmPassword }),
+      });
+      const data = await res.json().catch(() => null);
+
+      if (!data?.success) {
+        setError(data?.error || "Gagal memperbarui password.");
+        return;
+      }
+
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+      setShow(false);
+      onSuccess("Password admin berhasil diperbarui.");
+    } catch {
+      setError("Gagal menghubungi server.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  const inputType = show ? "text" : "password";
+
+  return (
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-4 rounded-2xl border border-border bg-surface p-5"
+    >
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <h3 className="flex items-center gap-2 text-sm font-bold">
+            <KeyRound size={15} /> Ubah Password Admin
+          </h3>
+          <p className="text-xs text-ink/50">
+            Mengubah password akun yang sedang kamu pakai login sekarang
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={() => setShow((v) => !v)}
+          className="flex shrink-0 items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-[11px] font-semibold text-ink/60 hover:text-ink"
+        >
+          {show ? <EyeOff size={13} /> : <Eye size={13} />}
+          {show ? "Sembunyikan" : "Tampilkan"}
+        </button>
+      </div>
+
+      {error && (
+        <p className="rounded-xl border border-rose-200 bg-rose-50 px-3.5 py-2.5 text-xs text-rose-700">
+          {error}
+        </p>
+      )}
+
+      <div className="grid gap-4 sm:grid-cols-3">
+        <div className="space-y-1">
+          <label className="text-xs font-semibold text-ink/60">Password Saat Ini</label>
+          <input
+            required
+            type={inputType}
+            autoComplete="current-password"
+            value={currentPassword}
+            onChange={(e) => setCurrentPassword(e.target.value)}
+            className="input"
+            placeholder="••••••••"
+          />
+        </div>
+        <div className="space-y-1">
+          <label className="text-xs font-semibold text-ink/60">Password Baru</label>
+          <input
+            required
+            type={inputType}
+            autoComplete="new-password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            className="input"
+            placeholder="Minimal 6 karakter"
+          />
+        </div>
+        <div className="space-y-1">
+          <label className="text-xs font-semibold text-ink/60">Konfirmasi Password Baru</label>
+          <input
+            required
+            type={inputType}
+            autoComplete="new-password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            className="input"
+            placeholder="Ulangi password baru"
+          />
+        </div>
+      </div>
+
+      <div className="border-t border-border pt-4">
+        <button type="submit" disabled={saving} className="btn-primary !px-5 !py-2.5 text-xs">
+          {saving ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
+          Simpan Password
+        </button>
+      </div>
+    </form>
   );
 }

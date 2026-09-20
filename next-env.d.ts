@@ -1,5 +1,5 @@
 /// <reference types="next" />
 /// <reference types="next/image-types/global" />
 
-// NOTE: File ini biasanya auto-generated oleh `next dev` / `next build`.
-// Jangan diedit manual — akan ditimpa otomatis saat project dijalankan.
+// NOTE: This file should not be edited
+// see https://nextjs.org/docs/app/building-your-application/configuring/typescript for more information.

@@ -2,11 +2,34 @@ import { NextRequest, NextResponse } from "next/server";
 import { verifyLogin } from "@/lib/accounts";
 import { createSessionToken, SESSION_COOKIE, SESSION_MAX_AGE } from "@/lib/session";
 import { logActivity } from "@/lib/activity";
+import { rateLimit, clientKey } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 
+// /api/admin/login sengaja DIKECUALIKAN dari middleware (harus bisa diakses
+// tanpa sesi). Konsekuensinya endpoint ini publik, dan setiap percobaan login
+// = 1 pembacaan segar accounts-data.json dari Blob (cache-busted) + 1 hashing
+// scrypt. Tanpa batas, script brute-force sederhana bisa menghasilkan ribuan
+// download Blob berbayar sekaligus membebani CPU.
+//
+// Batasnya longgar untuk manusia (salah ketik password beberapa kali tetap
+// aman) tapi memotong percobaan otomatis.
+const LOGIN_LIMIT = 10;
+const LOGIN_WINDOW_MS = 60_000;
+
 export async function POST(req: NextRequest) {
   try {
+    const gate = rateLimit(`admin:login:${clientKey(req)}`, LOGIN_LIMIT, LOGIN_WINDOW_MS);
+    if (!gate.allowed) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Terlalu banyak percobaan login. Coba lagi sebentar.",
+        },
+        { status: 429, headers: { "Retry-After": String(gate.retryAfterSeconds) } }
+      );
+    }
+
     const body = await req.json().catch(() => null);
     const username = (body?.username || "").toString();
     const password = (body?.password || "").toString();

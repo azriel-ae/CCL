@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { readSales, createSale, upsertSale, deleteSale, deleteAllSales } from "@/lib/sales";
 import { getSession } from "@/lib/auth";
+import { rateLimit, clientKey } from "@/lib/rate-limit";
 
 // Endpoint ini dipertahankan persis di path yang sama (/api/v1/sales) supaya
 // checkout WhatsApp di halaman utama tetap kompatibel tanpa perubahan.
@@ -52,9 +53,39 @@ export async function GET(req: NextRequest) {
   }
 }
 
+// Batas untuk endpoint publik POST. Setiap POST = 1 baca + 1 tulis Blob,
+// jadi batas ini melindungi biaya Blob sekaligus kebersihan data dashboard.
+const PUBLIC_POST_LIMIT = 20;
+const PUBLIC_POST_WINDOW_MS = 60_000;
+const MAX_BODY_BYTES = 8 * 1024;
+
 export async function POST(req: NextRequest) {
   try {
-    const order = await req.json().catch(() => null);
+    const gate = rateLimit(`sales:post:${clientKey(req)}`, PUBLIC_POST_LIMIT, PUBLIC_POST_WINDOW_MS);
+    if (!gate.allowed) {
+      return NextResponse.json(
+        { success: false, error: "Terlalu banyak permintaan. Coba lagi sebentar." },
+        { status: 429, headers: { "Retry-After": String(gate.retryAfterSeconds) } }
+      );
+    }
+
+    // Tolak payload raksasa sebelum di-parse: data ini akhirnya ikut tersimpan
+    // di file JSON penjualan, jadi ukurannya langsung memengaruhi ukuran Blob.
+    const raw = await req.text();
+    if (raw.length > MAX_BODY_BYTES) {
+      return NextResponse.json(
+        { success: false, error: "Data pesanan terlalu besar" },
+        { status: 413 }
+      );
+    }
+
+    let order: unknown = null;
+    try {
+      order = raw ? JSON.parse(raw) : null;
+    } catch {
+      order = null;
+    }
+
     if (!order || typeof order !== "object") {
       return NextResponse.json(
         { success: false, error: "Data pesanan tidak valid" },
@@ -62,7 +93,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const record = await createSale(order);
+    const record = await createSale(order as Parameters<typeof createSale>[0]);
     return NextResponse.json({ success: true, order: record }, { status: 201 });
   } catch (err) {
     console.error("POST /api/v1/sales error:", err);

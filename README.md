@@ -36,6 +36,14 @@ npm run build    # wajib lulus sebelum deploy ke Vercel
      Generate dengan: `node -e "console.log(crypto.randomBytes(48).toString('hex'))"`
    - `NEXT_PUBLIC_WHATSAPP_NUMBER` — nomor WhatsApp tujuan checkout (format `62xxxx`).
 
+2. **Login admin pertama kali**: buka `/admin/login`
+   - Username: `admin`
+   - Password: `123`
+   - **WAJIB ganti password ini** setelah login pertama (lewat tab "Kelola Akun",
+     atau buat akun baru lalu hapus akun `admin` default — akun Owner utama
+     `admin` sendiri tidak bisa dihapus dari UI sebagai pengaman, jadi minimal
+     buat kebiasaan mengganti password-nya secara berkala).
+
 3. Deploy ke Vercel seperti biasa (`vercel` CLI atau hubungkan repo Git). Jangan
    lupa tambahkan ketiga environment variable di atas di Vercel Project Settings.
 

@@ -5,13 +5,17 @@ import type { ActivityLogEntry } from "./types";
 const ACTIVITY_KEY = "activity-log.json";
 const MAX_LOGS = 200;
 
-export async function getActivityLogs(): Promise<ActivityLogEntry[]> {
-  const stored = await readJson<ActivityLogEntry[]>(ACTIVITY_KEY);
+export async function getActivityLogs(
+  options: { fresh?: boolean } = {}
+): Promise<ActivityLogEntry[]> {
+  const stored = await readJson<ActivityLogEntry[]>(ACTIVITY_KEY, { fresh: options.fresh });
   return stored || [];
 }
 
 export async function logActivity(username: string, action: string): Promise<void> {
-  const logs = await getActivityLogs();
+  // Read-modify-write: wajib baca versi terbaru supaya entri log dari request
+  // lain tidak hilang.
+  const logs = await getActivityLogs({ fresh: true });
   logs.unshift({
     id: "LOG-" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
     username,

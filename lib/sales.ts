@@ -5,8 +5,14 @@ import type { SaleRecord } from "./types";
 const SALES_KEY = "sales-data.json";
 const MAX_STORED = 500;
 
-export async function readSales(): Promise<SaleRecord[]> {
-  const data = await readJson<SaleRecord[]>(SALES_KEY);
+/**
+ * Membaca daftar penjualan. Tanpa opsi, hasilnya boleh dilayani cache singkat
+ * (dipakai untuk tampilan dashboard/rekap). Jalur yang akan MENULIS ulang
+ * daftar ini wajib memakai `{ fresh: true }` supaya tidak ada transaksi yang
+ * tertimpa.
+ */
+export async function readSales(options: { fresh?: boolean } = {}): Promise<SaleRecord[]> {
+  const data = await readJson<SaleRecord[]>(SALES_KEY, { fresh: options.fresh });
   return Array.isArray(data) ? data : [];
 }
 
@@ -36,7 +42,7 @@ export async function createSale(order: CreateSaleInput): Promise<SaleRecord> {
     date: order.date || new Date().toISOString(),
   };
 
-  const sales = await readSales();
+  const sales = await readSales({ fresh: true });
   sales.unshift(record);
   await writeSales(sales.slice(0, MAX_STORED));
   return record;
@@ -55,7 +61,7 @@ export async function upsertSale(
   body: Partial<SaleRecord> & { amount?: number }
 ): Promise<SaleRecord> {
   const targetKey = (body.id || body.invoice || "").toString();
-  const sales = await readSales();
+  const sales = await readSales({ fresh: true });
   const idx = sales.findIndex(
     (s) => (s.id || "").toString() === targetKey || (s.invoice || "").toString() === targetKey
   );
@@ -95,7 +101,7 @@ export async function upsertSale(
 }
 
 export async function deleteSale(id: string): Promise<boolean> {
-  const sales = await readSales();
+  const sales = await readSales({ fresh: true });
   const filtered = sales.filter(
     (s) => (s.id || "").toString() !== id && (s.invoice || "").toString() !== id
   );

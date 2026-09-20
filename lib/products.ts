@@ -1,5 +1,5 @@
 import "server-only";
-import { readJson, writeJson } from "./data-store";
+import { readJson, writeJson, deleteUploadedImage } from "./data-store";
 import type { Product } from "./types";
 
 const PRODUCTS_KEY = "products-data.json";
@@ -65,11 +65,15 @@ export const DEFAULT_PRODUCTS: Product[] = [
   },
 ];
 
-export async function getProducts(): Promise<Product[]> {
+export async function getProducts(options: { fresh?: boolean } = {}): Promise<Product[]> {
   try {
-    const stored = await readJson<Product[]>(PRODUCTS_KEY);
+    const stored = await readJson<Product[]>(PRODUCTS_KEY, { fresh: options.fresh });
     if (!stored || !Array.isArray(stored) || stored.length === 0) {
-      await writeJson(PRODUCTS_KEY, DEFAULT_PRODUCTS);
+      // Dulu di sini katalog default langsung DITULIS ke Blob. Artinya jalur
+      // baca (termasuk homepage publik) bisa memicu upload Blob — dan kalau
+      // pembacaan sempat gagal/kosong, upload itu terjadi berulang kali.
+      // Sekarang default hanya dikembalikan ke pemanggil; penulisan baru
+      // terjadi saat admin benar-benar mengubah katalog (saveProducts).
       return DEFAULT_PRODUCTS;
     }
     return stored;
@@ -82,6 +86,18 @@ export async function getProducts(): Promise<Product[]> {
   }
 }
 
+/**
+ * Hapus object Blob foto produk yang sudah tidak dipakai produk mana pun.
+ * Hanya menyentuh hasil upload di prefix `products/` (lihat data-store),
+ * jadi gambar statis /public dan URL eksternal tidak akan pernah tersentuh.
+ */
+async function cleanupOrphanImage(oldImg: string | undefined, products: Product[]) {
+  if (!oldImg) return;
+  const stillUsed = products.some((p) => p.img === oldImg);
+  if (stillUsed) return;
+  await deleteUploadedImage(oldImg);
+}
+
 export async function saveProducts(products: Product[]): Promise<void> {
   await writeJson(PRODUCTS_KEY, products);
 }
@@ -89,7 +105,7 @@ export async function saveProducts(products: Product[]): Promise<void> {
 export async function createProduct(
   input: Omit<Product, "id" | "price"> & { price?: number }
 ): Promise<Product> {
-  const products = await getProducts();
+  const products = await getProducts({ fresh: true });
   const newProduct: Product = {
     id: "p_" + Date.now().toString(36),
     name: input.name.trim(),
@@ -107,19 +123,26 @@ export async function updateProduct(
   id: string,
   updates: Partial<Omit<Product, "id">>
 ): Promise<Product | null> {
-  const products = await getProducts();
+  const products = await getProducts({ fresh: true });
   const idx = products.findIndex((p) => p.id === id);
   if (idx === -1) return null;
 
+  const previousImg = products[idx].img;
   products[idx] = { ...products[idx], ...updates };
   await saveProducts(products);
+
+  if (previousImg && previousImg !== products[idx].img) {
+    await cleanupOrphanImage(previousImg, products);
+  }
   return products[idx];
 }
 
 export async function deleteProduct(id: string): Promise<boolean> {
-  const products = await getProducts();
+  const products = await getProducts({ fresh: true });
+  const removed = products.find((p) => p.id === id);
   const filtered = products.filter((p) => p.id !== id);
   if (filtered.length === products.length) return false;
   await saveProducts(filtered);
+  await cleanupOrphanImage(removed?.img, filtered);
   return true;
 }
