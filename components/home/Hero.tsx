@@ -53,26 +53,41 @@ export function Hero() {
   const typingText = useTypingEffect(WORDS);
 
   return (
-    <section id="home" className="pt-16 md:pt-24">
+    <section id="home" className="pt-6 md:pt-24">
+      {/* Logo CCL — hanya di mobile, supaya langsung terlihat di first viewport
+         tanpa mendorong headline/CTA di desktop (yang sudah punya logo besar
+         di kolom kanan). Badge ini juga dipakai di Navbar, jadi asetnya sudah
+         teruji dan tidak menambah gambar baru. */}
+      <div className="container-edge flex justify-start pb-6 md:hidden">
+        <Image
+          src="/images/logo-badge.png"
+          alt="Logo Corat Coret Layar"
+          width={64}
+          height={64}
+          priority
+          className="h-14 w-14 animate-logo-in rounded-2xl"
+        />
+      </div>
+
       <div className="container-edge grid items-center gap-14 md:grid-cols-2 md:gap-10">
         <div>
-          <p className="eyebrow flex items-center gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+          <p className="eyebrow flex flex-wrap items-center gap-2">
+            <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
             Kita siap buat: <strong className="text-ink/80">{typingText}&nbsp;</strong>
           </p>
 
-          <h1 className="mt-5 font-display text-5xl font-bold leading-[1.05] tracking-tightest md:text-6xl">
+          <h1 className="mt-4 font-display text-4xl font-bold leading-[1.05] tracking-tightest sm:text-5xl md:mt-5 md:text-6xl">
             Custom Design Merchandise
             <br />
             <span className="text-accent">Made for Your Idea.</span>
           </h1>
 
-          <p className="mt-6 max-w-md text-base leading-relaxed text-ink/60">
+          <p className="mt-5 max-w-md text-base leading-relaxed text-ink/60 md:mt-6">
             Bikin custom design kaos, hoodie, sticker, flag, tote bag, dan jersey sesuai
             imajinasi kamu. Hasil rapi, detail presisi, dan pengerjaan cepat.
           </p>
 
-          <div className="mt-8 flex flex-wrap gap-3">
+          <div className="mt-6 flex flex-wrap gap-3 md:mt-8">
             <a href="#produk" className="btn-primary">Lihat Katalog</a>
             <a href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noopener" className="btn-outline">
               Konsultasi via WhatsApp
@@ -88,7 +103,7 @@ export function Hero() {
           </div>
         </div>
 
-        <div className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl border border-border bg-surface md:aspect-square">
+        <div className="relative hidden aspect-[4/3] w-full overflow-hidden rounded-3xl border border-border bg-surface md:block md:aspect-square">
           <Image
             src="/images/logo-full.png"
             alt="Logo Corat Coret Layar"
