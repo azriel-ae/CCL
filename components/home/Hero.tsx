@@ -62,10 +62,10 @@ export function Hero() {
         <Image
           src="/images/logo-badge.png"
           alt="Logo Corat Coret Layar"
-          width={64}
-          height={64}
+          width={96}
+          height={96}
           priority
-          className="h-14 w-14 animate-logo-in rounded-2xl"
+          className="h-24 w-24 animate-logo-in rounded-2xl"
         />
       </div>
 
