@@ -53,19 +53,19 @@ export function Hero() {
   const typingText = useTypingEffect(WORDS);
 
   return (
-    <section id="home" className="pt-6 md:pt-24">
+    <section id="home" className="pt-4 md:pt-24">
       {/* Logo CCL — hanya di mobile, supaya langsung terlihat di first viewport
          tanpa mendorong headline/CTA di desktop (yang sudah punya logo besar
          di kolom kanan). Badge ini juga dipakai di Navbar, jadi asetnya sudah
          teruji dan tidak menambah gambar baru. */}
-      <div className="container-edge flex justify-start pb-6 md:hidden">
+      <div className="container-edge flex justify-start pb-4 md:hidden">
         <Image
           src="/images/logo-badge.png"
           alt="Logo Corat Coret Layar"
-          width={96}
-          height={96}
+          width={140}
+          height={140}
           priority
-          className="h-24 w-24 animate-logo-in rounded-2xl"
+          className="h-32 w-32 animate-logo-in rounded-3xl"
         />
       </div>
 
@@ -76,18 +76,18 @@ export function Hero() {
             Kita siap buat: <strong className="text-ink/80">{typingText}&nbsp;</strong>
           </p>
 
-          <h1 className="mt-4 font-display text-4xl font-bold leading-[1.05] tracking-tightest sm:text-5xl md:mt-5 md:text-6xl">
+          <h1 className="mt-3 font-display text-4xl font-bold leading-[1.05] tracking-tightest sm:text-5xl md:mt-5 md:text-6xl">
             Custom Design Merchandise
             <br />
             <span className="text-accent">Made for Your Idea.</span>
           </h1>
 
-          <p className="mt-5 max-w-md text-base leading-relaxed text-ink/60 md:mt-6">
+          <p className="mt-4 max-w-md text-base leading-relaxed text-ink/60 md:mt-6">
             Bikin custom design kaos, hoodie, sticker, flag, tote bag, dan jersey sesuai
             imajinasi kamu. Hasil rapi, detail presisi, dan pengerjaan cepat.
           </p>
 
-          <div className="mt-6 flex flex-wrap gap-3 md:mt-8">
+          <div className="mt-5 flex flex-wrap gap-3 md:mt-8">
             <a href="#produk" className="btn-primary">Lihat Katalog</a>
             <a href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noopener" className="btn-outline">
               Konsultasi via WhatsApp
