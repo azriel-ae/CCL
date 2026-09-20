@@ -53,41 +53,44 @@ export function Hero() {
   const typingText = useTypingEffect(WORDS);
 
   return (
-    <section id="home" className="pt-4 md:pt-24">
-      {/* Logo CCL — hanya di mobile, supaya langsung terlihat di first viewport
-         tanpa mendorong headline/CTA di desktop (yang sudah punya logo besar
-         di kolom kanan). Badge ini juga dipakai di Navbar, jadi asetnya sudah
-         teruji dan tidak menambah gambar baru. */}
-      <div className="container-edge flex justify-start pb-4 md:hidden">
-        <Image
-          src="/images/logo-badge.png"
-          alt="Logo Corat Coret Layar"
-          width={140}
-          height={140}
-          priority
-          className="h-32 w-32 animate-logo-in rounded-3xl"
-        />
+    <section id="home" className="pt-0 md:pt-24">
+      {/* Logo CCL — layar pertama di mobile: navbar + logo ini pas satu layar
+         (h-[76px] mengikuti tinggi Navbar), jadi begitu website dibuka logo
+         langsung dominan tanpa scroll sama sekali. Headline/deskripsi/CTA ada
+         di layar berikutnya waktu discroll. Tidak ada delay/loading apa pun —
+         ini bagian biasa dari halaman, langsung bisa di-scroll & diklik. */}
+      <div className="flex h-[calc(100dvh-76px)] min-h-[360px] items-center justify-center md:hidden">
+        <div className="relative aspect-square w-[min(86vw,calc((100dvh-76px)*0.82))] animate-logo-in">
+          <Image
+            src="/images/logo-badge.png"
+            alt="Logo Corat Coret Layar"
+            fill
+            priority
+            className="object-contain"
+            sizes="86vw"
+          />
+        </div>
       </div>
 
-      <div className="container-edge grid items-center gap-14 md:grid-cols-2 md:gap-10">
+      <div className="container-edge grid items-center gap-14 pt-10 md:grid-cols-2 md:gap-10 md:pt-0">
         <div>
           <p className="eyebrow flex flex-wrap items-center gap-2">
             <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
             Kita siap buat: <strong className="text-ink/80">{typingText}&nbsp;</strong>
           </p>
 
-          <h1 className="mt-3 font-display text-4xl font-bold leading-[1.05] tracking-tightest sm:text-5xl md:mt-5 md:text-6xl">
+          <h1 className="mt-5 font-display text-4xl font-bold leading-[1.05] tracking-tightest sm:text-5xl md:text-6xl">
             Custom Design Merchandise
             <br />
             <span className="text-accent">Made for Your Idea.</span>
           </h1>
 
-          <p className="mt-4 max-w-md text-base leading-relaxed text-ink/60 md:mt-6">
+          <p className="mt-6 max-w-md text-base leading-relaxed text-ink/60">
             Bikin custom design kaos, hoodie, sticker, flag, tote bag, dan jersey sesuai
             imajinasi kamu. Hasil rapi, detail presisi, dan pengerjaan cepat.
           </p>
 
-          <div className="mt-5 flex flex-wrap gap-3 md:mt-8">
+          <div className="mt-8 flex flex-wrap gap-3">
             <a href="#produk" className="btn-primary">Lihat Katalog</a>
             <a href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noopener" className="btn-outline">
               Konsultasi via WhatsApp
